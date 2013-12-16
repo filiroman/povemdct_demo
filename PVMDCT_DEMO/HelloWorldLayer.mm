@@ -33,6 +33,7 @@ enum {
 
 @property (nonatomic, retain) PVManager *manager;
 @property (nonatomic, retain) CCPhysicsSprite *sprite;
+@property (nonatomic, retain) CCMenu *menu;
 
 -(void) initPhysics;
 -(void) addNewSpriteAtPosition:(CGPoint)p;
@@ -89,20 +90,35 @@ enum {
 		[self addChild:parent z:0 tag:kTagParentNode];
 		
 		
-		[self addNewSpriteAtPosition:ccp(s.width/2, s.height/3)];
-		
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Tap screen" fontName:@"Marker Felt" fontSize:32];
+		/*CCLabelTTF *label = [CCLabelTTF labelWithString:@"Tap screen" fontName:@"Marker Felt" fontSize:32];
 		[self addChild:label z:0];
 		[label setColor:ccc3(0,0,255)];
-		label.position = ccp( s.width/2, s.height-50);
+		label.position = ccp( s.width/2, s.height-50);*/
         
 		[self scheduleUpdate];
         
         [self addThing];
         
         //[self setupMotion];
+        [[CCDirector sharedDirector] setDisplayFPS:NO];
 	}
 	return self;
+}
+
+- (void)onEnter
+{
+    [super onEnter];
+    
+    CGSize s = [CCDirector sharedDirector].winSize;
+    
+    [self addNewSpriteAtPosition:ccp(s.width/2, s.height/2)];
+    [self addNewSpriteAtPosition:ccp(s.width/1.5, s.height/2)];
+    [self addNewSpriteAtPosition:ccp(s.width/2.5, s.height/2)];
+    [self addNewSpriteAtPosition:ccp(s.width/3, s.height/2)];
+    [self addNewSpriteAtPosition:ccp(s.width/3.5, s.height/2)];
+    [self addNewSpriteAtPosition:ccp(s.width/4, s.height/2)];
+    [self addNewSpriteAtPosition:ccp(s.width/4.5, s.height/2)];
+    [self addNewSpriteAtPosition:ccp(s.width/5, s.height/2)];
 }
 
 - (void)addThing
@@ -183,6 +199,7 @@ enum {
 	m_debugDraw = NULL;
     
     self.motionManager = nil;
+    self.menu = nil;
 	
 	[super dealloc];
 }	
@@ -197,31 +214,33 @@ enum {
 		[[CCDirector sharedDirector] replaceScene: [HelloWorldLayer scene]];
 	}];
 
-	CCMenuItem *itemClient = [CCMenuItemFont itemWithString:@"Client" block:^(id sender) {
-		
-        
-        [self.manager startClientSide:(id)self];
-        
-        //[[PVCaptureManager sharedManager] subscribeToGyroEvents:(id)self];
-        
-	}];
+	CCMenuItem *itemClient = [CCMenuItemFont itemWithString:@"Client" target:self selector:@selector(menuTapped:)];
+    itemClient.tag = 1;
+    
+	CCMenuItem *itemServer = [CCMenuItemFont itemWithString:@"Server" target:self selector:@selector(menuTapped:)];
+    itemServer.tag = 2;
 	
-
-	CCMenuItem *itemServer = [CCMenuItemFont itemWithString:@"Server" block:^(id sender) {
-		
-
-        [self.manager startServerSize:(id)self];
-	}];
+	self.menu = [CCMenu menuWithItems:itemClient, itemServer, reset, nil];
 	
-	CCMenu *menu = [CCMenu menuWithItems:itemClient, itemServer, reset, nil];
-	
-	[menu alignItemsVertically];
+	[self.menu alignItemsVertically];
 	
 	CGSize size = [[CCDirector sharedDirector] winSize];
-	[menu setPosition:ccp( size.width/4, size.height/2)];
+	[self.menu setPosition:ccp( size.width/4, size.height/2)];
 	
 	
-	[self addChild: menu z:-1];	
+	[self addChild: self.menu z:-1];
+}
+
+- (void)menuTapped:(CCMenuItem*)sender
+{
+    if (sender.tag == 1)
+    {
+        [self.manager startClientSide:(id)self];
+    } else {
+        [self.manager startServerSize:(id)self];
+    }
+    
+    [self.menu runAction:[CCFadeOut actionWithDuration:0.5f]];
 }
 
 - (void)PVManagerDidEstablishedConnection:(PVManager*)manager
@@ -288,7 +307,7 @@ enum {
 
 }
 
--(void) draw
+/*-(void) draw
 {
 	//
 	// IMPORTANT:
@@ -301,10 +320,10 @@ enum {
 	
 	kmGLPushMatrix();
 	
-	world->DrawDebugData();	
+	//world->DrawDebugData();
 	
 	kmGLPopMatrix();
-}
+}*/
 
 -(void) addNewSpriteAtPosition:(CGPoint)p
 {
@@ -384,13 +403,16 @@ enum {
 {
     NSLog(@"%.3f / %.3f", mdata.gravity.y, mdata.gravity.x);
     
-    b2Vec2 gravity;
-    gravity.Set(mdata.gravity.y*10, -mdata.gravity.x*10);
-    world->SetGravity(gravity);
+    //@synchronized(_sprite) {
     
-    CGFloat yAngle = -mdata.gravity.y * 90.0f;
-    
-    [self.sprite setRotation:yAngle];
+        b2Vec2 gravity;
+        gravity.Set(mdata.gravity.y*10, -mdata.gravity.x*10);
+        world->SetGravity(gravity);
+        
+        CGFloat yAngle = -mdata.gravity.y * 90.0f;
+        
+        [self.sprite setRotation:yAngle];
+    //}
 
 }
 
