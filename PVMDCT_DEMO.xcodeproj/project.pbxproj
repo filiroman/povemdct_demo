@@ -1583,6 +1583,7 @@
 				);
 				INFOPLIST_FILE = PVMDCT_DEMO/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-lsqlite3",
@@ -1618,6 +1619,7 @@
 				);
 				INFOPLIST_FILE = PVMDCT_DEMO/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-lsqlite3",

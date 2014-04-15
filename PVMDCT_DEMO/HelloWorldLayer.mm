@@ -35,6 +35,8 @@ enum {
 @property (nonatomic, retain) CCPhysicsSprite *sprite;
 @property (nonatomic, retain) CCMenu *menu;
 
+@property (nonatomic, retain) NSDictionary *gyroDevice;
+
 -(void) initPhysics;
 -(void) addNewSpriteAtPosition:(CGPoint)p;
 -(void) createMenu;
@@ -65,7 +67,7 @@ enum {
 		
 		self.touchEnabled = YES;
 		self.accelerometerEnabled = YES;
-		CGSize s = [CCDirector sharedDirector].winSize;
+        self.gyroDevice = nil;
         
         self.motionManager = [[[CMMotionManager alloc] init] autorelease];
         self.manager = [PVManager sharedManager];
@@ -155,40 +157,12 @@ enum {
     self.sprite = [CCPhysicsSprite spriteWithTexture:spriteTexture_ rect:CGRectMake(32 * idx,32 * idy,32,32)];
 	[parent addChild:_sprite];
 	
+    //[_sprite setIgnoreBodyRotation:YES];
 	[_sprite setPTMRatio:PTM_RATIO];
 	[_sprite setB2Body:body];
 	[_sprite setPosition: ccp( half.width, half.height)];
 }
 
-/*- (void)setupMotion
-{
-    
-    if ([self.motionManager isDeviceMotionAvailable])
-    {
-        if ([self.motionManager isDeviceMotionActive] == NO)
-        {
-            [self.motionManager setDeviceMotionUpdateInterval:1/10.0f];
-            
-            [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMDeviceMotion *motion, NSError *error) {
-                
-                b2Vec2 gravity;
-                gravity.Set(motion.gravity.y*30, -motion.gravity.x*30);
-                world->SetGravity(gravity);
-                
-                CGFloat yAngle = -motion.gravity.y * 90.0f;
-                
-                [self.sprite setRotation:yAngle];
-                
-        //        if (fabs(motion.a) > 0.5)
-          //      {
-                    self.sprite.position = CGPointMake(self.sprite.position.x + motion.userAcceleration.y * 5, self.sprite.position.y);
-            //    }
-                
-                NSLog(@"%f/%f", motion.userAcceleration.x, motion.userAcceleration.y);
-            }];
-        }
-    }
-}*/
 
 -(void) dealloc
 {
@@ -243,9 +217,20 @@ enum {
     [self.menu runAction:[CCFadeOut actionWithDuration:0.5f]];
 }
 
-- (void)PVManagerDidEstablishedConnection:(PVManager*)manager
+- (void)PVManager:(PVManager*)manager didFoundDevice:(NSDictionary*)device withCapabilities:(NSString*)capabilities
 {
-    [[PVCaptureManager sharedManager] subscribeToGyroEvents:(id)self];
+    if ([capabilities rangeOfString:@"gyro"].location != NSNotFound)
+    {
+        if (_gyroDevice == nil)
+            self.gyroDevice = device;
+        
+        [manager connectWithDevice:device];
+    }
+}
+
+- (void)PVManager:(PVManager*)manager didEstablishedConnectionWithDevice:(NSDictionary*)device withCapabilities:(NSString*)capabilities
+{
+    [[PVCaptureManager sharedManager] subscribeToMotionEvents:(id)self forDevice:device];
 }
 
 -(void) initPhysics
@@ -389,30 +374,41 @@ enum {
 	}
 }
 
-- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedGyroscopeData:(CMGyroData*)gdata
+- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedGyroscopeData:(CMGyroData*)gdata fromDevice:(NSDictionary*)device
 {
     NSLog(@"Gyro received!");
 }
 
-- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedAccelerometerData:(CMAccelerometerData*)accdata
+- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedAccelerometerData:(CMAccelerometerData*)accdata fromDevice:(NSDictionary*)device
 {
     NSLog(@"Accl received!");
 }
 
-- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedMotionData:(CMDeviceMotion*)mdata
+- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedMotionData:(CMDeviceMotion*)mdata fromDevice:(NSDictionary*)device
 {
-    NSLog(@"%.3f / %.3f", mdata.gravity.y, mdata.gravity.x);
-    
-    //@synchronized(_sprite) {
-    
+    if ([[device objectForKey:@"host"] isEqualToString:[_gyroDevice objectForKey:@"host"]]) {
+        
+        NSLog(@"%.3f / %.3f", mdata.gravity.y, mdata.gravity.x);
+        
         b2Vec2 gravity;
         gravity.Set(mdata.gravity.y*10, -mdata.gravity.x*10);
         world->SetGravity(gravity);
+    
+    } else {
+    //@synchronized(_sprite) {
         
         CGFloat yAngle = -mdata.gravity.y * 90.0f;
+        /*CGFloat kFilteringFactor = 0.6;
+        CGFloat accelY = (mdata.gravity.y * kFilteringFactor) + (accelY * (1.0 - kFilteringFactor));
+        
+        ombreoeuf1.rotation = accelY * 90;*/
+        
+        NSLog(@"%.3f ", yAngle);
         
         [self.sprite setRotation:yAngle];
+        //[self.sprite runAction:[CCRotateBy actionWithDuration:0.2f angle:yAngle]];
     //}
+    }
 
 }
 
