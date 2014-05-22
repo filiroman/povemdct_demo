@@ -32,6 +32,8 @@ enum {
 @property (nonatomic, retain) CMMotionManager *motionManager;
 
 @property (nonatomic, retain) PVManager *manager;
+
+
 @property (nonatomic, retain) CCPhysicsSprite *sprite;
 @property (nonatomic, retain) CCMenu *menu;
 
@@ -70,6 +72,8 @@ enum {
         self.gyroDevice = nil;
         
         self.motionManager = [[[CMMotionManager alloc] init] autorelease];
+        
+        
         self.manager = [PVManager sharedManager];
 		
 		// init physics
@@ -121,6 +125,8 @@ enum {
     [self addNewSpriteAtPosition:ccp(s.width/4, s.height/2)];
     [self addNewSpriteAtPosition:ccp(s.width/4.5, s.height/2)];
     [self addNewSpriteAtPosition:ccp(s.width/5, s.height/2)];
+    
+    NSLog(@"sizeeee %lu",sizeof(uint32_t));
 }
 
 - (void)addThing
@@ -374,17 +380,17 @@ enum {
 	}
 }
 
-- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedGyroscopeData:(CMGyroData*)gdata fromDevice:(NSDictionary*)device
+- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedGyroscopeData:(PVGyroData*)gdata fromDevice:(NSDictionary*)device
 {
     NSLog(@"Gyro received!");
 }
 
-- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedAccelerometerData:(CMAccelerometerData*)accdata fromDevice:(NSDictionary*)device
+- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedAccelerometerData:(PVAccelerometerData*)accdata fromDevice:(NSDictionary*)device
 {
     NSLog(@"Accl received!");
 }
 
-- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedMotionData:(CMDeviceMotion*)mdata fromDevice:(NSDictionary*)device
+- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedMotionData:(PVMotionData*)mdata fromDevice:(NSDictionary*)device
 {
     if ([[device objectForKey:@"host"] isEqualToString:[_gyroDevice objectForKey:@"host"]]) {
         
@@ -395,21 +401,13 @@ enum {
         world->SetGravity(gravity);
     
     } else {
-    //@synchronized(_sprite) {
         
         CGFloat yAngle = -mdata.gravity.y * 90.0f;
-        /*CGFloat kFilteringFactor = 0.6;
-        CGFloat accelY = (mdata.gravity.y * kFilteringFactor) + (accelY * (1.0 - kFilteringFactor));
-        
-        ombreoeuf1.rotation = accelY * 90;*/
         
         NSLog(@"%.3f ", yAngle);
         
         [self.sprite setRotation:yAngle];
-        //[self.sprite runAction:[CCRotateBy actionWithDuration:0.2f angle:yAngle]];
-    //}
     }
-
 }
 
 @end
