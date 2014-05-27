@@ -10,6 +10,7 @@
 
 #import "AppDelegate.h"
 #import "IntroLayer.h"
+#import <povemdct/PVWindow.h>
 
 @implementation MyNavigationController
 
@@ -60,7 +61,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	// Create the main window
-	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	window_ = [[PVWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
 	
 	// Create an CCGLView with a RGB565 color buffer, and a depth buffer of 0-bits

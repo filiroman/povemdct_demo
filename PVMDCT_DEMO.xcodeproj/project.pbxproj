@@ -187,10 +187,10 @@
 		E32BD7C2185769F7000170D2 /* GLES-Render.mm in Sources */ = {isa = PBXBuildFile; fileRef = E32BD7C1185769F7000170D2 /* GLES-Render.mm */; };
 		E32BD7C4185769F7000170D2 /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = E32BD7C3185769F7000170D2 /* blocks.png */; };
 		E32BD7CB1857AE89000170D2 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E32BD7CA1857AE89000170D2 /* CoreMotion.framework */; };
-		E3449680191D319F000E1049 /* libPOVEMDCT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E345582A185B28D700D6478E /* libPOVEMDCT.a */; };
 		E3449681191D31DB000E1049 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3455832185B2AFC00D6478E /* opencv2.framework */; };
 		E3455835185B2C8E00D6478E /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3455834185B2C8E00D6478E /* CoreMedia.framework */; };
 		E3455837185B2C9A00D6478E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3455836185B2C9A00D6478E /* AssetsLibrary.framework */; };
+		E39EB9BE192E2C71004F875B /* libPOVEMDCT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E345582A185B28D700D6478E /* libPOVEMDCT.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -612,8 +612,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E39EB9BE192E2C71004F875B /* libPOVEMDCT.a in Frameworks */,
 				E3449681191D31DB000E1049 /* opencv2.framework in Frameworks */,
-				E3449680191D319F000E1049 /* libPOVEMDCT.a in Frameworks */,
 				E3455837185B2C9A00D6478E /* AssetsLibrary.framework in Frameworks */,
 				E3455835185B2C8E00D6478E /* CoreMedia.framework in Frameworks */,
 				E32BD7CB1857AE89000170D2 /* CoreMotion.framework in Frameworks */,
@@ -1583,6 +1583,10 @@
 				);
 				INFOPLIST_FILE = PVMDCT_DEMO/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PVMDCT_DEMO/Resources",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -1619,6 +1623,10 @@
 				);
 				INFOPLIST_FILE = PVMDCT_DEMO/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PVMDCT_DEMO/Resources",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",

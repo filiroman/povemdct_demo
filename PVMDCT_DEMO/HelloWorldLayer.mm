@@ -225,7 +225,7 @@ enum {
 
 - (void)PVManager:(PVManager*)manager didFoundDevice:(NSDictionary*)device withCapabilities:(NSString*)capabilities
 {
-    if ([capabilities rangeOfString:@"gyro"].location != NSNotFound)
+    if ([capabilities rangeOfString:@"touch"].location != NSNotFound)
     {
         if (_gyroDevice == nil)
             self.gyroDevice = device;
@@ -236,7 +236,7 @@ enum {
 
 - (void)PVManager:(PVManager*)manager didEstablishedConnectionWithDevice:(NSDictionary*)device withCapabilities:(NSString*)capabilities
 {
-    [[PVCaptureManager sharedManager] subscribeToMotionEvents:(id)self forDevice:device];
+    [[PVCaptureManager sharedManager] subscribeToTouchEvents:(id)self forDevice:device];
 }
 
 -(void) initPhysics
@@ -408,6 +408,12 @@ enum {
         
         [self.sprite setRotation:yAngle];
     }
+}
+
+- (void)PVCaptureManager:(PVCaptureManager*)manager didReceivedTouchAtPosition:(CGPoint)touchPosition fromDevice:(NSDictionary*)device
+{
+    NSLog(@"%.3f / %.3f", touchPosition.x, touchPosition.y);
+    [self addNewSpriteAtPosition:touchPosition];
 }
 
 @end
