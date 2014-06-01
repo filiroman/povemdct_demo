@@ -225,7 +225,7 @@ enum {
 
 - (void)PVManager:(PVManager*)manager didFoundDevice:(NSDictionary*)device withCapabilities:(NSString*)capabilities
 {
-    if ([capabilities rangeOfString:@"touch"].location != NSNotFound)
+    if ([capabilities rangeOfString:@"face_capture"].location != NSNotFound)
     {
         if (_gyroDevice == nil)
             self.gyroDevice = device;
@@ -236,7 +236,7 @@ enum {
 
 - (void)PVManager:(PVManager*)manager didEstablishedConnectionWithDevice:(NSDictionary*)device withCapabilities:(NSString*)capabilities
 {
-    [[PVCaptureManager sharedManager] subscribeToTouchEvents:(id)self forDevice:device];
+    [[PVCaptureManager sharedManager] subscribeToCameraEvents:(id)self forDevice:device];
 }
 
 -(void) initPhysics
@@ -414,6 +414,11 @@ enum {
 {
     NSLog(@"%.3f / %.3f", touchPosition.x, touchPosition.y);
     [self addNewSpriteAtPosition:touchPosition];
+}
+
+- (void)PVCaptureManager:(PVCaptureManager*)manager didRecievedFaceCaptureAtRect:(CGRect)captureRect fromDevice:(NSDictionary*)device
+{
+    NSLog(@"%@",NSStringFromCGRect(captureRect));
 }
 
 @end

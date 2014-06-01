@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E307C31219376B6700731AA1 /* haarcascade_frontalface_alt2.xml in Resources */ = {isa = PBXBuildFile; fileRef = E307C31119376B6700731AA1 /* haarcascade_frontalface_alt2.xml */; };
 		E32BD585185769F3000170D2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E32BD584185769F3000170D2 /* QuartzCore.framework */; };
 		E32BD587185769F3000170D2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E32BD586185769F3000170D2 /* OpenGLES.framework */; };
 		E32BD589185769F3000170D2 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E32BD588185769F3000170D2 /* OpenAL.framework */; };
@@ -225,6 +226,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E307C31119376B6700731AA1 /* haarcascade_frontalface_alt2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = haarcascade_frontalface_alt2.xml; path = ../povemdct/povemdct/haarcascade_frontalface_alt2.xml; sourceTree = "<group>"; };
 		E32BD581185769F3000170D2 /* PVMDCT_DEMO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PVMDCT_DEMO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E32BD584185769F3000170D2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E32BD586185769F3000170D2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -635,6 +637,7 @@
 		E32BD578185769F3000170D2 = {
 			isa = PBXGroup;
 			children = (
+				E307C31119376B6700731AA1 /* haarcascade_frontalface_alt2.xml */,
 				E34557CD185AFD3800D6478E /* Povemdct */,
 				E32BD596185769F3000170D2 /* PVMDCT_DEMO */,
 				E32BD583185769F3000170D2 /* Frameworks */,
@@ -1341,6 +1344,7 @@
 				E32BD599185769F3000170D2 /* Default.png in Resources */,
 				E32BD5A3185769F3000170D2 /* Icon-Small-50.png in Resources */,
 				E32BD5AE185769F3000170D2 /* iTunesArtwork in Resources */,
+				E307C31219376B6700731AA1 /* haarcascade_frontalface_alt2.xml in Resources */,
 				E32BD7C4185769F7000170D2 /* blocks.png in Resources */,
 				E32BD5A7185769F3000170D2 /* Icon-Small@2x.png in Resources */,
 				E32BD59F185769F3000170D2 /* Default-Landscape~ipad.png in Resources */,
